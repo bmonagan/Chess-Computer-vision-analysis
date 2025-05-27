@@ -6,5 +6,5 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "ultralytics>=8.3.145",
-    "pytorch = "2.7.0",
+    "torch>=2.0.0",
 ]
