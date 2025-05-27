@@ -1,7 +1,10 @@
 [project]
-name = "chessyolo"
+name = "chess-computer-vision-analysis"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "ultralytics>=8.3.145",
+    "pytorch = "2.7.0",
+]
