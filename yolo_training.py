@@ -6,11 +6,11 @@ def main():
     model = YOLO(model_name)
     results = model.train(
         data='data_set\\Merge_chess.v1i.yolov11\\data.yaml',
-        epochs=50,
+        epochs=10,
         imgsz=640,
         batch=8,
         name='my_yolo_training_run',
-        device="0",
+        device= "cpu",
         workers=1,
         patience=10,
     )

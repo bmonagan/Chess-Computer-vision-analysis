@@ -2,7 +2,7 @@ task: detect
 mode: train
 model: YOLO11m.pt
 data: data_set\Merge_chess.v1i.yolov11\data.yaml
-epochs: 5
+epochs: 100
 time: null
 patience: 10
 batch: 8
@@ -10,7 +10,7 @@ imgsz: 640
 save: true
 save_period: -1
 cache: false
-device: '0'
+device: cpu
 workers: 1
 project: null
 name: my_yolo_training_run2
