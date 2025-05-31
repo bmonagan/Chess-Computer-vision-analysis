@@ -1,7 +1,8 @@
-import os # For path manipulation, e.g., getting basenames of files
+import os
 from ultralytics import YOLO
-from PIL import Image # Example if you want to do more with r.plot() PIL image
-import torch # If you want to use torch for tensor operations or accessing device info
+from PIL import Image
+import torch
+import pandas as pd  # Add this import
 
 # Load model and define source
 model_path = 'runs/detect/my_yolo_training_run7/weights/best.pt'
@@ -12,11 +13,10 @@ source_directory = 'testing/images' # image directory
 prediction_results_path = custom_model.predict(
     source=source_directory,       # Using the directory as source
     save=True,                     # Save images with detections
-    conf=0.5,                      # Confidence threshold
+    conf=0.8,                      # Confidence threshold
     project='my_inference_outputs',      # Parent directory for these prediction runs
-    name='predictions_set1_threshold0.5', # Specific sub-directory for this prediction run
+    name='predictions_set1_threshold0.8', # Specific sub-directory for this prediction run
     exist_ok=True,                 # If True, won't increment run number if 'name' exists
-                                   # Set to False if you always want a new numbered run
     save_txt=True,                 # Save results as .txt files (YOLO format labels)
     save_conf=True,                # Include confidence scores in --save-txt labels
     save_crop=False,               # Set to True to save cropped images of detections
@@ -33,12 +33,13 @@ if isinstance(prediction_results_path, str): # For single image/video, predict m
 # Loop to process results for each source image/frame ---
 results_generator = prediction_results_path
 
+all_detections_list = []  # Collect all detections here
+
 for i, r in enumerate(results_generator): 
-    original_image_path = r.path  # Path to the original image file
+    original_image_path = r.path
     base_filename = os.path.basename(original_image_path)
     print(f"\n--- Processing results for: {original_image_path} ({i+1} of {len(results_generator) if hasattr(results_generator, '__len__') else 'N/A'}) ---")
 
-        # 3. Accessing bounding box information
     if r.boxes is not None:
         print(f"  Detected {len(r.boxes)} objects:")
         for box_index in range(len(r.boxes)):
@@ -49,10 +50,12 @@ for i, r in enumerate(results_generator):
             print(f"    Box {box_index+1}: Class='{class_name}' (ID {class_id}), Confidence={confidence:.2f}, Coordinates (xyxy)={xyxy}")
             detection_data = {
                 "image_path": original_image_path,
+                "class_id": class_id,
                 "class_name": class_name,
                 "confidence": confidence,
                 "x1": xyxy[0], "y1": xyxy[1], "x2": xyxy[2], "y2": xyxy[3]
             }
+            all_detections_list.append(detection_data)  # Add to list
     else:
         print("  Detected 0 objects.")
 
@@ -105,10 +108,8 @@ for i, r in enumerate(results_generator):
 
 print("\n--- Finished processing all prediction results. ---")
 
-# Example: If you collected detection_data into a list of dictionaries, save to CSV here
-# import pandas as pd
-# all_detections_list = [] # Assume this was populated in the loop
-# if all_detections_list:
-#   df = pd.DataFrame(all_detections_list)
-#   df.to_csv("all_my_detections.csv", index=False)
-#   print("Saved all detection data to all_my_detections.csv")
+# Save all detections to CSV with labels
+if all_detections_list:
+    df = pd.DataFrame(all_detections_list)
+    df.to_csv("all_my_detections_with_labels.csv", index=False)
+    print("Saved all detection data with labels to all_my_detections_with_labels.csv")
