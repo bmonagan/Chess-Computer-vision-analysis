@@ -7,8 +7,14 @@ import pandas as pd  # Add this import
 # Load model and define source
 model_path = 'runs/detect/my_yolo_training_run7/weights/best.pt'
 custom_model = YOLO(model_path)
-
-source_directory = 'testing/images' # image directory
+choices = {
+    "easy": "testing\\images\\1_easy",
+    "medium": "testing\\images\\2_medium",
+    "hard": "testing\\images\\3_hard",
+    "unrealistic": "testing\\webcam",
+    "all": "testing\\images",
+}
+source_directory = choices["all"] # image directory
 
 # # Single Image Path
 # source_directory = 'testing/images/qg_closeup.jpg'

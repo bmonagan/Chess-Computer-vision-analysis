@@ -5,3 +5,10 @@ The entire training set was jpegs so maybe that is playing a role in it. Not sur
 
 
 Trying with the close up image worked a little bit better. Still getting white labels for many black pieces but it is generally identifying the correct piece even if the color is wrong.
+
+
+With the chess image from the wire can see again that if theres too much visual noise or the board is too far away its not going to be able to detect anything.
+
+The seventh seal also establishes another problem being irregular piece shapes. Would imagine that you would have to train it on all the different piece shapes but then it might read more false positives.
+
+Still trending overall to overreading the black pieces as being white. 
