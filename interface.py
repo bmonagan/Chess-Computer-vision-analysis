@@ -8,23 +8,25 @@ import pandas as pd  # Add this import
 model_path = 'runs/detect/my_yolo_training_run7/weights/best.pt'
 custom_model = YOLO(model_path)
 
-# source_directory = 'testing/images' # image directory
+source_directory = 'testing/images' # image directory
 
-# Single Image Path
-source_directory = 'testing/images/qg_closeup.jpg'
-confidence_threshold = 0.2
+# # Single Image Path
+# source_directory = 'testing/images/qg_closeup.jpg'
+
+
+confidence_threshold = 0.5
 
 prediction_results_path = custom_model.predict(
     source=source_directory,       # Using the directory as source
     save=True,                     # Save images with detections
     conf=confidence_threshold,                  # Confidence threshold
     project='my_inference_outputs',      # Parent directory for these prediction runs
-    name=f'predictions_set1_threshold{confidence_threshold}', # Specific sub-directory for this prediction run
+    name=f'predictions_set1_threshold_{confidence_threshold}', # Specific sub-directory for this prediction run
     exist_ok=True,                 # If True, won't increment run number if 'name' exists
     save_txt=True,                 # Save results as .txt files (YOLO format labels)
     save_conf=True,                # Include confidence scores in --save-txt labels
     save_crop=False,               # Set to True to save cropped images of detections
-    line_width=1,                  # Thickness of bounding box lines
+    line_width=None,                  # Thickness of bounding box lines
     show_labels=True,              # Show labels on bounding boxes
     show_conf=True                 # Show confidence scores on bounding boxes
 )
