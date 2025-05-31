@@ -12,14 +12,14 @@ custom_model = YOLO(model_path)
 
 # Single Image Path
 source_directory = 'testing/images/qg_closeup.jpg'
-
+confidence_threshold = 0.2
 
 prediction_results_path = custom_model.predict(
     source=source_directory,       # Using the directory as source
     save=True,                     # Save images with detections
-    conf=0.8,                      # Confidence threshold
+    conf=confidence_threshold,                  # Confidence threshold
     project='my_inference_outputs',      # Parent directory for these prediction runs
-    name='predictions_set1_threshold0.8', # Specific sub-directory for this prediction run
+    name=f'predictions_set1_threshold{confidence_threshold}', # Specific sub-directory for this prediction run
     exist_ok=True,                 # If True, won't increment run number if 'name' exists
     save_txt=True,                 # Save results as .txt files (YOLO format labels)
     save_conf=True,                # Include confidence scores in --save-txt labels
@@ -29,7 +29,7 @@ prediction_results_path = custom_model.predict(
     show_conf=True                 # Show confidence scores on bounding boxes
 )
 
-print(f"Prediction outputs (annotated images, text files if save_txt=True) are saved in directories starting from: my_inference_outputs/predictions_set1_threshold0.5/")
+print(f"Prediction outputs (annotated images, text files if save_txt=True) are saved in directories starting from: my_inference_outputs/predictions_set1_threshold{confidence_threshold}/")
 if isinstance(prediction_results_path, str): # For single image/video, predict might return path directly
     print(f"Main results saved to: {prediction_results_path}")
 
