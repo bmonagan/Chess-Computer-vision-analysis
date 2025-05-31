@@ -8,7 +8,11 @@ import pandas as pd  # Add this import
 model_path = 'runs/detect/my_yolo_training_run7/weights/best.pt'
 custom_model = YOLO(model_path)
 
-source_directory = 'testing/images' # image directory
+# source_directory = 'testing/images' # image directory
+
+# Single Image Path
+source_directory = 'testing/images/qg_closeup.jpg'
+
 
 prediction_results_path = custom_model.predict(
     source=source_directory,       # Using the directory as source
@@ -109,7 +113,14 @@ for i, r in enumerate(results_generator):
 print("\n--- Finished processing all prediction results. ---")
 
 # Save all detections to CSV with labels
+csv_path = "all_my_detections_with_labels.csv"
 if all_detections_list:
     df = pd.DataFrame(all_detections_list)
-    df.to_csv("all_my_detections_with_labels.csv", index=False)
-    print("Saved all detection data with labels to all_my_detections_with_labels.csv")
+    file_exists = os.path.isfile(csv_path)
+    df.to_csv(
+        csv_path,
+        mode='a' if file_exists else 'w',
+        header=not file_exists,
+        index=False
+    )
+    print(f"Saved all detection data with labels to {csv_path} (appended if file existed).")
