@@ -14,7 +14,7 @@ choices = {
     "unrealistic": "testing/images/4_unrealistic",
     # "all": "testing/images",  # Not working for some reason.
 }
-source_directory = choices["hard"] # image directory
+source_directory = choices["easy"] # image directory
 
 # # Single Image Path
 # source_directory = 'testing/images/qg_closeup.jpg'
@@ -59,13 +59,17 @@ for i, r in enumerate(results_generator):
             class_name = r.names[class_id]
             confidence = float(r.boxes.conf[box_index])
             xyxy = r.boxes.xyxy[box_index].tolist()
-            print(f"    Box {box_index+1}: Class='{class_name}' (ID {class_id}), Confidence={confidence:.2f}, Coordinates (xyxy)={xyxy}")
+            # Get just the folder and file name
+            parent_folder = os.path.basename(os.path.dirname(original_image_path))
+            file_name = os.path.basename(original_image_path)
+            image_path_short = f"{parent_folder}/{file_name}"
             detection_data = {
-                "image_path": original_image_path,
+                "image_path": image_path_short,
                 "class_id": class_id,
                 "class_name": class_name,
                 "confidence": confidence,
-                "x1": xyxy[0], "y1": xyxy[1], "x2": xyxy[2], "y2": xyxy[3]
+                "x1": xyxy[0], "y1": xyxy[1], "x2": xyxy[2], "y2": xyxy[3],
+                "correct_label": "True"  # Example of a user-defined label
             }
             all_detections_list.append(detection_data)  # Add to list
     else:
@@ -122,8 +126,16 @@ print("\n--- Finished processing all prediction results. ---")
 
 # Save all detections to CSV with labels
 csv_path = "all_my_detections_with_labels.csv"
+columns = [
+    "image_path",
+    "class_id",
+    "class_name",
+    "confidence",
+    "x1", "y1", "x2", "y2",
+    "correct_label"
+]
 if all_detections_list:
-    df = pd.DataFrame(all_detections_list)
+    df = pd.DataFrame(all_detections_list, columns=columns)
     file_exists = os.path.isfile(csv_path)
     df.to_csv(
         csv_path,
