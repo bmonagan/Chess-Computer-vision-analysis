@@ -7,12 +7,13 @@ def main():
     results = model.train(
         data='data_set\\Merge_chess.v1i.yolov11\\data.yaml',
         epochs=100,
-        imgsz=720,
+        imgsz=640,
         batch=8,
         name='my_yolo_training_run',
         device= 0,
         workers=1,
-        patience=35,
+        patience=20,
+        amp=False,
     )
     if results is not None and hasattr(results, "save_dir"):
         print("Training complete. Best model saved at:", results.save_dir)
