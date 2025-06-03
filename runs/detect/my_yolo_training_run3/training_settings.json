@@ -1,0 +1,12 @@
+{
+    "model_name": "yolov8n.pt",
+    "data": "data_set/Merge_chess/data.yaml",
+    "epochs": 300,
+    "imgsz": 416,
+    "batch": 8,
+    "name": "my_yolo_training_run",
+    "device": "cpu",
+    "workers": 1,
+    "patience": 50,
+    "amp": false
+}

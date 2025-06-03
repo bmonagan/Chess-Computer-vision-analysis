@@ -14,13 +14,13 @@ def main():
     training_settings = {
         "model_name": model_name,
         "data": 'data_set/Merge_chess/data.yaml',
-        "epochs": 3,
+        "epochs": 300,
         "imgsz": 416,
-        "batch": 1,
+        "batch": 8,
         "name": 'my_yolo_training_run',
         "device": "cpu",
         "workers": 1,
-        "patience": 20,
+        "patience": 50,
         "amp": False,
     }
     # Save settings as JSON
