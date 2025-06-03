@@ -5,7 +5,7 @@ import torch
 import pandas as pd  # Add this import
 
 # Load model and define source
-model_path = 'runs/detect/my_yolo_training_run7/weights/best.pt'
+model_path = 'runs/detect/my_yolo_training_run2/weights/best.pt'
 custom_model = YOLO(model_path)
 choices = {
     "easy": "testing/images/1_easy",

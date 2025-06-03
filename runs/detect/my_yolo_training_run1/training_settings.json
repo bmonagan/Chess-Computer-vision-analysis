@@ -1,0 +1,11 @@
+{
+    "data": "data_set\\Merge_chess.v1i.yolov11\\data.yaml",
+    "epochs": 50,
+    "imgsz": 640,
+    "batch": 8,
+    "name": "my_yolo_training_run",
+    "device": "0",
+    "workers": 1,
+    "patience": 10,
+    "amp": false
+}
