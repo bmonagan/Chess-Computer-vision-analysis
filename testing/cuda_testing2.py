@@ -1,8 +1,6 @@
 import torch
-print(torch.__version__)
-print(torch.version.cuda)
-print(torch.cuda.is_available())
-print(torch.cuda.device_count())
-import os
-print(os.getcwd())
-print(os.environ.get("CUDA_VISIBLE_DEVICES"))
+import torchvision
+print(torch.__version__)        # Should show +cu118
+print(torchvision.__version__)  # Should show +cu118 or similar
+print(torchvision.ops.nms)      # Should NOT error
+print(torch.cuda.is_available())# Should be True
