@@ -5,7 +5,7 @@ from datetime import datetime
 
 
 def main():
-    model_name = 'yolov8n.pt' 
+    model_name = 'models/yolov8n.pt' 
     model = YOLO(model_name)
 
     # Create a unique directory for each run using timestamp
