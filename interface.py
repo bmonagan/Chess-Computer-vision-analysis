@@ -13,15 +13,16 @@ choices = {
     "medium": "testing/images/2_medium",
     "hard": "testing/images/3_hard",
     "unrealistic": "testing/images/4_unrealistic",
+    "testing" : "Merge_chess.v1i.yolov8/test/images"
     # "all": "testing/images",  # Not working for some reason.
 }
-source_directory = choices["easy"] # image directory
+source_directory = choices["testing"] # image directory
 
 # # Single Image Path
 # source_directory = 'testing/images/qg_closeup.jpg'
 
 
-confidence_threshold = 0.5
+confidence_threshold = 0.8
 
 # Extract the folder name from the model_path
 folder_name = os.path.basename(os.path.dirname(os.path.dirname(model_path)))
@@ -88,6 +89,17 @@ for i, r in enumerate(results_generator):
     else:
         print("  Detected 0 objects.")
 
+    # Add a buffer row after each image's detections
+    all_detections_list.append({
+        "image_path": "---",
+        "class_id": "",
+        "class_name": "",
+        "confidence": "",
+        "x1": "", "y1": "", "x2": "", "y2": "",
+        "correct_label": ""
+    })
+
+    # TODO
     # 4. Accessing masks (if it's a segmentation model and masks are present)
     if r.masks is not None:
         print(f"  Detected {len(r.masks)} masks.")
@@ -99,7 +111,7 @@ for i, r in enumerate(results_generator):
         # r.plot(masks=True) # To get an image with masks visualized (returns a NumPy array)
     else:
         print("  No masks in this result (or not a segmentation model).")
-
+    # TODO
     # Accessing keypoints 
     if r.keypoints is not None:
         print(f"  Detected {len(r.keypoints)} sets of keypoints.")
@@ -127,6 +139,7 @@ for i, r in enumerate(results_generator):
     else:
         print("  No classification probabilities (probs) in this result.")
 
+    # TODO ADDITIONAL
     # Get the plotted image as a NumPy array (BGR format by default)
     # This is the same image that r.show() displays or r.save() saves.
     # annotated_image_numpy = r.plot()
