@@ -3,9 +3,10 @@ from ultralytics import YOLO
 from PIL import Image
 import torch
 import pandas as pd  # Add this import
+import re
 
 # Load model and define source
-model_path = 'runs/detect/my_yolo_training_run2/weights/best.pt'
+model_path = 'runs/detect/my_yolo_training_run_20250603_1929262/weights/best.pt'
 custom_model = YOLO(model_path)
 choices = {
     "easy": "testing/images/1_easy",
@@ -22,11 +23,23 @@ source_directory = choices["easy"] # image directory
 
 confidence_threshold = 0.5
 
+# Extract the folder name from the model_path
+folder_name = os.path.basename(os.path.dirname(os.path.dirname(model_path)))
+# Find all number groups in the folder name
+number_sets = re.findall(r'\d+', folder_name)
+# Get the last two number sets (if available)
+if len(number_sets) >= 2:
+    suffix = f"{number_sets[-2]}_{number_sets[-1]}"
+else:
+    suffix = "_".join(number_sets)
+
+project_dir = f"my_inference_outputs_{suffix}"
+
 prediction_results_path = custom_model.predict(
     source=source_directory,       # Using the directory as source
     save=True,                     # Save images with detections
     conf=confidence_threshold,                  # Confidence threshold
-    project='my_inference_outputs',      # Parent directory for these prediction runs
+    project=project_dir,  # Use the dynamically generated project directory
     name=f'predictions_set1_threshold_{confidence_threshold}', # Specific sub-directory for this prediction run
     exist_ok=True,                 # If True, won't increment run number if 'name' exists
     save_txt=True,                 # Save results as .txt files (YOLO format labels)
