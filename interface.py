@@ -13,7 +13,7 @@ choices = {
     "medium": "testing/images/2_medium",
     "hard": "testing/images/3_hard",
     "unrealistic": "testing/images/4_unrealistic",
-    "testing" : "Merge_chess.v1i.yolov8/test/images"
+    "testing" : "testing/images/1_easy/from_test"
     # "all": "testing/images",  # Not working for some reason.
 }
 source_directory = choices["testing"] # image directory
@@ -22,7 +22,7 @@ source_directory = choices["testing"] # image directory
 # source_directory = 'testing/images/qg_closeup.jpg'
 
 
-confidence_threshold = 0.8
+confidence_threshold = 0.5
 
 # Extract the folder name from the model_path
 folder_name = os.path.basename(os.path.dirname(os.path.dirname(model_path)))
@@ -151,7 +151,7 @@ for i, r in enumerate(results_generator):
 print("\n--- Finished processing all prediction results. ---")
 
 # Save all detections to CSV with labels
-csv_path = "all_my_detections_with_labels.csv"
+csv_path = "test_data_detections_with_labels.csv"
 columns = [
     "image_path",
     "class_id",
