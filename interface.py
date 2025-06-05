@@ -14,7 +14,6 @@ choices = {
     "hard": "testing/images/3_hard",
     "unrealistic": "testing/images/4_unrealistic",
     "testing" : "testing/images/from_test"
-    # "all": "testing/images",  # Not working for some reason.
 }
 source_directory = choices["testing"] # image directory
 
