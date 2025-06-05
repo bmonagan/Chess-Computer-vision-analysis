@@ -13,7 +13,7 @@ choices = {
     "medium": "testing/images/2_medium",
     "hard": "testing/images/3_hard",
     "unrealistic": "testing/images/4_unrealistic",
-    "testing" : "testing/images/1_easy/from_test"
+    "testing" : "testing/images/from_test"
     # "all": "testing/images",  # Not working for some reason.
 }
 source_directory = choices["testing"] # image directory
@@ -41,7 +41,7 @@ prediction_results_path = custom_model.predict(
     save=True,                     # Save images with detections
     conf=confidence_threshold,                  # Confidence threshold
     project=project_dir,  # Use the dynamically generated project directory
-    name=f'predictions_set1_threshold_{confidence_threshold}', # Specific sub-directory for this prediction run
+    name=f'threshold_{confidence_threshold}', # Specific sub-directory for this prediction run
     exist_ok=True,                 # If True, won't increment run number if 'name' exists
     save_txt=True,                 # Save results as .txt files (YOLO format labels)
     save_conf=True,                # Include confidence scores in --save-txt labels
@@ -157,7 +157,7 @@ columns = [
     "class_id",
     "class_name",
     "confidence",
-    "x1", "y1", "x2", "y2",
+    "x1", "y1", "x2", "y2", #bounding box coordinates
     "correct_label"
 ]
 if all_detections_list:
