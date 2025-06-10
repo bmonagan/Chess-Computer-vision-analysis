@@ -5,31 +5,28 @@ from datetime import datetime
 
 
 def main():
-    model_name = 'models/yolov8n.pt' 
-    model = YOLO(model_name)
+    # yolo model
+    # model_name = 'models/yolov8n.pt' 
+    # model = YOLO(model_name)
+    
+    model_name = "last.pt"
+    model = YOLO("runs/detect/my_yolo_training_run_20250603_1929262/weights/last.pt")
 
-    # Create a unique directory for each run using timestamp
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-    save_dir = os.path.join("runs", "detect", f"my_yolo_training_run_{run_id}")
-    os.makedirs(save_dir, exist_ok=True)
+    run_name = f"my_yolo_training_run_{run_id}"
 
-    # Training settings to save
     training_settings = {
         "model_name": model_name,
         "data": 'Merge_chess.v1i.yolov8/data.yaml',
-        "epochs": 100,
+        "epochs": 50,
         "imgsz": 416,
-        "batch": 4,
-        "name": f"my_yolo_training_run_{run_id}",
+        "batch": 8,
+        "name": run_name,
         "device": "cpu",
         "workers": 1,
         "patience": 30,
         "amp": False,
     }
-
-    # Save settings as JSON in the unique run directory
-    with open(os.path.join(save_dir, "training_settings.json"), "w") as f:
-        json.dump(training_settings, f, indent=4)
 
     results = model.train(
         data=training_settings["data"],
@@ -42,9 +39,21 @@ def main():
         patience=training_settings["patience"],
         amp=training_settings["amp"],
         project=os.path.join("runs", "detect"),
+        tensorboard=True,  
     )
+
+    # Debug: print results and save_dir
+    print("results:", results)
     if results is not None and hasattr(results, "save_dir"):
-        print("Training complete. Best model saved at:", results.save_dir)
+        print("YOLO run directory:", results.save_dir)
+        json_path = os.path.join(results.save_dir, "training_settings.json")
+        print("Attempting to write JSON to:", json_path)
+        try:
+            with open(json_path, "w") as f:
+                json.dump(training_settings, f, indent=4)
+            print(f"Saved training settings to {json_path}")
+        except Exception as e:
+            print(f"Failed to save JSON: {e}")
     else:
         print("Training did not return results as expected. Check for errors above.")
 
