@@ -8,13 +8,12 @@ def main():
     # yolo model
     # model_name = 'models/yolov8n.pt' 
     # model = YOLO(model_name)
-    
-    model_name = "last.pt"
-    model = YOLO("runs/detect/my_yolo_training_run_20250603_1929262/weights/last.pt")
+    model_name = "best.pt"
+    model = YOLO("runs/detect/my_yolo_training_run_20250603_1929262/weights/best.pt")
 
-    run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-    run_name = f"my_yolo_training_run_{run_id}"
-
+    # run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # run_name = f"my_yolo_training_run_{run_id}"
+    run_name = "fine_tune_yolo_run_20250603_1929262"
     training_settings = {
         "model_name": model_name,
         "data": 'Merge_chess.v1i.yolov8/data.yaml',
