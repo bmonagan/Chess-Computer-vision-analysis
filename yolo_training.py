@@ -41,21 +41,6 @@ def main():
         project=os.path.join("runs", "detect"),  
     )
 
-    # Debug: print results and save_dir
-    print("results:", results)
-    if results is not None and hasattr(results, "save_dir"):
-        print("YOLO run directory:", results.save_dir)
-        json_path = os.path.join(results.save_dir, "training_settings.json")
-        print("Attempting to write JSON to:", json_path)
-        try:
-            with open(json_path, "w") as f:
-                json.dump(training_settings, f, indent=4)
-            print(f"Saved training settings to {json_path}")
-        except Exception as e:
-            print(f"Failed to save JSON: {e}")
-    else:
-        print("Training did not return results as expected. Check for errors above.")
-
 
 if __name__ == '__main__':
     main()
