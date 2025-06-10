@@ -38,8 +38,7 @@ def main():
         workers=training_settings["workers"],
         patience=training_settings["patience"],
         amp=training_settings["amp"],
-        project=os.path.join("runs", "detect"),
-        tensorboard=True,  
+        project=os.path.join("runs", "detect"),  
     )
 
     # Debug: print results and save_dir
