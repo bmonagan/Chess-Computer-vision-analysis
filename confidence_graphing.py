@@ -8,7 +8,7 @@ import os
 sns.set_theme(style="darkgrid")
 
 
-csv_path = os.path.join(os.path.dirname(__file__), r'C:\Users\Owner.BLIZZCON\Documents\Programming\Projects\Chess Computer vision analysis\my_inference_outputs_20250603_1929262\test_data_detections_with_labels.csv')
+csv_path = r'C:\Users\Owner.BLIZZCON\Documents\Programming\Projects\Chess Computer vision analysis\my_inference_outputs\fine_tuning_20250603\threshold_0.5\fine_tuning_test_data_detections_with_labels.csv'
 df = pd.read_csv(csv_path)
 
 
@@ -31,7 +31,13 @@ plt.xlabel('Class Name')
 plt.ylabel('Confidence (%)')
 plt.xticks(rotation=45)
 plt.tight_layout()
-plt.savefig('my_inference_outputs_20250603_1929262/wrong_confidence_boxplot.png', dpi=300, bbox_inches='tight')
+
+# Ensure the graphs directory exists
+graphs_dir = r'C:\Users\Owner.BLIZZCON\Documents\Programming\Projects\Chess Computer vision analysis\my_inference_outputs\fine_tuning_20250603\threshold_0.5\graphs'
+os.makedirs(graphs_dir, exist_ok=True)
+
+# Then use this for saving
+plt.savefig(os.path.join(graphs_dir, 'wrong_confidence_boxplot.png'), dpi=300, bbox_inches='tight')
 plt.show()
 
 # Calculate total predictions per class
@@ -58,7 +64,7 @@ plt.xlabel('Class Name')
 plt.ylabel('Wrong Prediction Percentage (%)')
 plt.xticks(rotation=45)
 plt.tight_layout()
-plt.savefig('my_inference_outputs_20250603_1929262/wrong_percentage_barplot.png', dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(graphs_dir, 'wrong_percentage_barplot.png'), dpi=300, bbox_inches='tight')
 plt.show()
 
 # Calculate correct predictions per class
@@ -82,5 +88,9 @@ plt.xlabel('Class Name')
 plt.ylabel('Correct Prediction Percentage (%)')
 plt.xticks(rotation=45)
 plt.tight_layout()
-plt.savefig('my_inference_outputs_20250603_1929262/correct_percentage_barplot.png', dpi=300, bbox_inches='tight')
+plt.savefig(os.path.join(graphs_dir, 'correct_percentage_barplot.png'), dpi=300, bbox_inches='tight')
 plt.show()
+
+print("CSV exists:", os.path.isfile(csv_path))
+print("DataFrame shape:", df.shape)
+print(df.head())

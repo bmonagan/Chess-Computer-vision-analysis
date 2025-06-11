@@ -6,7 +6,7 @@ import pandas as pd  # Add this import
 import re
 
 # Load model and define source
-model_path = 'runs/detect/my_yolo_training_run_20250603_1929262/weights/best.pt'
+model_path = r"runs\detect\fine_tune_yolo_run_20250603_1929262\weights\best.pt"
 custom_model = YOLO(model_path)
 choices = {
     "easy": "testing/images/1_easy",
@@ -23,17 +23,20 @@ source_directory = choices["testing"] # image directory
 
 confidence_threshold = 0.5
 
-# Extract the folder name from the model_path
-folder_name = os.path.basename(os.path.dirname(os.path.dirname(model_path)))
-# Find all number groups in the folder name
-number_sets = re.findall(r'\d+', folder_name)
-# Get the last two number sets (if available)
-if len(number_sets) >= 2:
-    suffix = f"{number_sets[-2]}_{number_sets[-1]}"
-else:
-    suffix = "_".join(number_sets)
+# # Extract the folder name from the model_path
+# folder_name = os.path.basename(os.path.dirname(os.path.dirname(model_path)))
+# # Find all number groups in the folder name
+# number_sets = re.findall(r'\d+', folder_name)
+# # Get the last two number sets (if available)
+# if len(number_sets) >= 2:
+#     suffix = f"{number_sets[-2]}_{number_sets[-1]}"
+# else:
+#     suffix = "_".join(number_sets)
 
-project_dir = f"my_inference_outputs_{suffix}"
+# project_dir = f"my_inference_outputs_{suffix}"
+
+# Non-Dynamic Choice
+project_dir = "my_inference_outputs/fine_tuning_20250603"  # Static directory for this example
 
 prediction_results_path = custom_model.predict(
     source=source_directory,       # Using the directory as source
@@ -121,9 +124,7 @@ for i, r in enumerate(results_generator):
     else:
         print("  No keypoints in this result (or not a pose estimation model).")
 
-    # Accessing classification probabilities 
-    # For pure object detection, r.probs might be None or less relevant unless it's also doing classification.
-    # If your model is a classifier, r.probs (or r.cls for top class, r.names for mapping) would be key.
+    # Accessing classification probabilities
     if r.probs is not None:
         probs_tensor = r.probs.data if hasattr(r.probs, "data") else r.probs
         if not isinstance(probs_tensor, torch.Tensor):
@@ -150,7 +151,7 @@ for i, r in enumerate(results_generator):
 print("\n--- Finished processing all prediction results. ---")
 
 # Save all detections to CSV with labels
-csv_path = "test_data_detections_with_labels.csv"
+csv_path = "fine_tuning_test_data_detections_with_labels.csv"
 columns = [
     "image_path",
     "class_id",
