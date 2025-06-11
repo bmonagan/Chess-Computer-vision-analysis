@@ -13,7 +13,7 @@ df = pd.read_csv(csv_path)
 
 
 # Convert correct_label to boolean if needed
-df['correct_label'] = df['correct_label'].map({'True': True, 'False': False})
+df['correct_label'] = df['correct_label'].astype(str).map({'True': True, 'False': False})
 
 # Filter for wrong predictions
 wrong_df = df[df['correct_label'] == False].copy()
