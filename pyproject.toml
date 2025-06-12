@@ -1,7 +1,7 @@
 [project]
 name = "chess-computer-vision-analysis"
 version = "0.1.0"
-description = "Add your description here"
+description = "A chess computer vision analysis tool for detecting and analyzing chess pieces on a board."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

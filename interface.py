@@ -23,6 +23,7 @@ source_directory = choices["testing"] # image directory
 
 confidence_threshold = 0.5
 
+# # ----Dynamic Project Directory Creation-----
 # # Extract the folder name from the model_path
 # folder_name = os.path.basename(os.path.dirname(os.path.dirname(model_path)))
 # # Find all number groups in the folder name
@@ -36,7 +37,7 @@ confidence_threshold = 0.5
 # project_dir = f"my_inference_outputs_{suffix}"
 
 # Non-Dynamic Choice
-project_dir = "my_inference_outputs/fine_tuning_20250603"  # Static directory for this example
+project_dir = "my_inference_outputs/fine_tuning_20250603"  
 
 prediction_results_path = custom_model.predict(
     source=source_directory,       # Using the directory as source
@@ -85,7 +86,7 @@ for i, r in enumerate(results_generator):
                 "class_name": class_name,
                 "confidence": confidence,
                 "x1": xyxy[0], "y1": xyxy[1], "x2": xyxy[2], "y2": xyxy[3],
-                "correct_label": "True"  # Example of a user-defined label
+                "correct_label": "True"  
             }
             all_detections_list.append(detection_data)  # Add to list
     else:
@@ -101,29 +102,6 @@ for i, r in enumerate(results_generator):
         "correct_label": ""
     })
 
-    # TODO
-    # 4. Accessing masks (if it's a segmentation model and masks are present)
-    if r.masks is not None:
-        print(f"  Detected {len(r.masks)} masks.")
-        # For mask details, you'd access r.masks.data, r.masks.xy, etc.
-        # Example:
-        # for mask_index, mask_polygon_points in enumerate(r.masks.xy):
-        #     print(f"    Mask {mask_index+1} polygon points: {mask_polygon_points[:3]}... (first 3 points)")
-        # Segmented objects can also be plotted or saved.
-        # r.plot(masks=True) # To get an image with masks visualized (returns a NumPy array)
-    else:
-        print("  No masks in this result (or not a segmentation model).")
-    # TODO
-    # Accessing keypoints 
-    if r.keypoints is not None:
-        print(f"  Detected {len(r.keypoints)} sets of keypoints.")
-        # For keypoint details, access r.keypoints.xy, r.keypoints.conf
-        # Example:
-        # for kp_index, keypoints_for_instance in enumerate(r.keypoints.xy): # Keypoints for one detected instance
-        #      print(f"    Keypoints set {kp_index+1}: {keypoints_for_instance[:2]}... (first 2 keypoints x,y)")
-    else:
-        print("  No keypoints in this result (or not a pose estimation model).")
-
     # Accessing classification probabilities
     if r.probs is not None:
         probs_tensor = r.probs.data if hasattr(r.probs, "data") else r.probs
@@ -138,15 +116,6 @@ for i, r in enumerate(results_generator):
             print(f"    {k+1}. Class='{class_name}' (ID {class_id}), Probability={prob:.4f}")
     else:
         print("  No classification probabilities (probs) in this result.")
-
-    # TODO ADDITIONAL
-    # Get the plotted image as a NumPy array (BGR format by default)
-    # This is the same image that r.show() displays or r.save() saves.
-    # annotated_image_numpy = r.plot()
-    # You can then use OpenCV (cv2) or Pillow (PIL) to do further processing/saving with this array.
-    # Example with PIL:
-    # pil_image = Image.fromarray(annotated_image_numpy[..., ::-1]) # Convert BGR to RGB for PIL
-    # pil_image.save(os.path.join(custom_save_dir, f"pil_saved_{base_filename}"))
 
 print("\n--- Finished processing all prediction results. ---")
 

@@ -10,10 +10,14 @@ def main():
     # model = YOLO(model_name)
     model_name = "best.pt"
     model = YOLO("runs/detect/my_yolo_training_run_20250603_1929262/weights/best.pt")
-
+    
+    # --- Dynamic Project Directory Creation ---
     # run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
     # run_name = f"my_yolo_training_run_{run_id}"
+    
+    # -- Non-Dynamic Choice --
     run_name = "fine_tune_yolo_run_20250603_1929262"
+    
     training_settings = {
         "model_name": model_name,
         "data": 'Merge_chess.v1i.yolov8/data.yaml',
@@ -21,7 +25,7 @@ def main():
         "imgsz": 416,
         "batch": 8,
         "name": run_name,
-        "device": "cpu",
+        "device": "cpu", # ideally would be 0 or 'cuda:0' for GPU if gpu was working
         "workers": 1,
         "patience": 30,
         "amp": False,
