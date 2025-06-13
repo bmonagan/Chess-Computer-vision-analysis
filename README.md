@@ -45,3 +45,7 @@ Another option would be to just set aside the time for the model to run when im 
 
 
 With an accurate enough detection model the plan was to create a pipeline for taking images of a chess board and then getting a computer evaluation of the chess position.
+- Doing more research into this it would require a ground up rebuild most likely.
+- Would need to use perspective transformation to map out the four corners of the board and have a more overhead view
+- Then would need to create a map of the board in a matrix which could then more easily be converted to FEN text format
+- This would also require mapping out all the squares so the model and the testing images would be much more complicated
