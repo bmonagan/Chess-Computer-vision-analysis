@@ -42,7 +42,7 @@ Options for hardware limitations include using an online gpu source like google 
 
 Another option would be to just set aside the time for the model to run when im not using the conmputer as runnign the model on gpu created a large amount of lag in all the other processes.
 
-
+Could also have tried more modifications to hyperparameters as the testing results were not accurate enough for what i was looking to do.
 
 With an accurate enough detection model the plan was to create a pipeline for taking images of a chess board and then getting a computer evaluation of the chess position.
 - Doing more research into this it would require a ground up rebuild most likely.
