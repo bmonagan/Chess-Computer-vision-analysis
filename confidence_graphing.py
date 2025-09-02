@@ -11,24 +11,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import config
+
 sns.set_theme(style="darkgrid")
 
-#swited computers so should updated paths if i want to use this again in the future.
-# should probably not hardcode paths like this as well or use a env or config file.
-CSV_PATH = (
-    r'C:\Users\Owner.BLIZZCON\Documents\Programming\Projects'
-    r'\Chess Computer vision analysis\my_inference_outputs'
-    r'\fine_tuning_20250603\threshold_0.5'
-    r'\fine_tuning_test_data_detections_with_labels.csv'
-)
+
+CSV_PATH = config.CSV_PATH
 df = pd.read_csv(CSV_PATH)
 
 
-# Convert correct_label to boolean if needed
-df['correct_label'] = df['correct_label'].astype(str).map({'True': True, 'False': False})
+# # Convert correct_label to boolean if needed
+# df['correct_label'] = df['correct_label'].astype(str).map({'True': True, 'False': False})
 
 # Filter for wrong predictions
-wrong_df = df[df['correct_label'] == False].copy()
+wrong_df = df[df['correct_label'] == 'False'].copy()
 wrong_df['confidence_pct'] = wrong_df['confidence'] * 100  # Convert to percent
 
 plt.figure(figsize=(14, 7))
@@ -45,11 +41,7 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 
 # Ensure the graphs directory exists
-GRAPHS_DIR = (
-    r'C:\Users\Owner.BLIZZCON\Documents\Programming\Projects'
-    r'\Chess Computer vision analysis\my_inference_outputs'
-    r'\fine_tuning_20250603\threshold_0.5\graphs'
-)
+GRAPHS_DIR = config.GRAPHS_DIR
 os.makedirs(GRAPHS_DIR, exist_ok=True)
 
 # Then use this for saving
@@ -84,7 +76,7 @@ plt.savefig(os.path.join(GRAPHS_DIR, 'wrong_percentage_barplot.png'), dpi=300, b
 plt.show()
 
 # Calculate correct predictions per class
-correct_df = df[df['correct_label'] == True]
+correct_df = df[df['correct_label'] == 'True']
 correct_counts = correct_df['class_name'].value_counts().reset_index()
 correct_counts.columns = ['class_name', 'correct_count']
 
