@@ -1,3 +1,7 @@
+"""
+Configuration file for storing paths and settings used across the Chess Computer Vision Analysis project.
+Update these values as needed for your environment.
+"""
 DETECTION_CSV_PATH = "path/to/detection.csv"
 DETECTION_OUTPUT = "path/to/detection_output.png"
 
