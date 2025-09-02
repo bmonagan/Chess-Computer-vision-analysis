@@ -1,23 +1,26 @@
-from ultralytics import YOLO
+"""
+Module for training a YOLO model on a chess dataset using the Ultralytics YOLO library.
+Handles model loading, training configuration, and training execution.
+"""
 import os
-import json
 from datetime import datetime
+from ultralytics import YOLO
 
 
 def main():
     # yolo model
-    # model_name = 'models/yolov8n.pt' 
+    # model_name = 'models/yolov8n.pt'
     # model = YOLO(model_name)
     model_name = "best.pt"
     model = YOLO("runs/detect/my_yolo_training_run_20250603_1929262/weights/best.pt")
-    
+
     # --- Dynamic Project Directory Creation ---
-    # run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
-    # run_name = f"my_yolo_training_run_{run_id}"
-    
+    run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+    run_name = f"my_yolo_training_run_{run_id}"
+
     # -- Non-Dynamic Choice --
-    run_name = "fine_tune_yolo_run_20250603_1929262"
-    
+    # run_name = "fine_tune_yolo_run_20250603_1929262"
+
     training_settings = {
         "model_name": model_name,
         "data": 'Merge_chess.v1i.yolov8/data.yaml',
@@ -41,7 +44,7 @@ def main():
         workers=training_settings["workers"],
         patience=training_settings["patience"],
         amp=training_settings["amp"],
-        project=os.path.join("runs", "detect"),  
+        project=os.path.join("runs", "detect"),
     )
 
 
