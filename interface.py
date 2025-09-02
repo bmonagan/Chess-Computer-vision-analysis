@@ -1,13 +1,19 @@
+"""
+Interface for running YOLO model inference on chessboard images.
+Handles model loading, image directory selection, and project directory setup for inference outputs.
+"""
+# Standard Imports
 import os
+# Library Imports
 from ultralytics import YOLO
-from PIL import Image
 import torch
 import pandas as pd  # Add this import
-import re
+# Project Imports
+import config
 
 # Load model and define source
-model_path = r"runs\detect\fine_tune_yolo_run_20250603_1929262\weights\best.pt"
-custom_model = YOLO(model_path)
+MODEL_PATH = config.MODEL_PATH
+custom_model = YOLO(MODEL_PATH)
 choices = {
     "easy": "testing/images/1_easy",
     "medium": "testing/images/2_medium",
@@ -15,17 +21,17 @@ choices = {
     "unrealistic": "testing/images/4_unrealistic",
     "testing" : "testing/images/from_test"
 }
-source_directory = choices["testing"] # image directory
+SOURCE_DIRECTORY = choices["testing"] # image directory
 
 # # Single Image Path
-# source_directory = 'testing/images/qg_closeup.jpg'
+# SOURCE_DIRECTORY= 'testing/images/qg_closeup.jpg'
 
 
-confidence_threshold = 0.5
+CONFIDENCE_THRESHOLD = 0.5
 
 # # ----Dynamic Project Directory Creation-----
-# # Extract the folder name from the model_path
-# folder_name = os.path.basename(os.path.dirname(os.path.dirname(model_path)))
+# # Extract the folder name from the MODEL_PATH
+# folder_name = os.path.basename(os.path.dirname(os.path.dirname(MODEL_PATH)))
 # # Find all number groups in the folder name
 # number_sets = re.findall(r'\d+', folder_name)
 # # Get the last two number sets (if available)
@@ -34,17 +40,17 @@ confidence_threshold = 0.5
 # else:
 #     suffix = "_".join(number_sets)
 
-# project_dir = f"my_inference_outputs_{suffix}"
+# PROJECT_DIR = f"my_inference_outputs_{suffix}"
 
 # Non-Dynamic Choice
-project_dir = "my_inference_outputs/fine_tuning_20250603"  
+PROJECT_DIR = "my_inference_outputs/fine_tuning_20250603"
 
 prediction_results_path = custom_model.predict(
-    source=source_directory,       # Using the directory as source
+    source=SOURCE_DIRECTORY,       # Using the directory as source
     save=True,                     # Save images with detections
-    conf=confidence_threshold,                  # Confidence threshold
-    project=project_dir,  # Use the dynamically generated project directory
-    name=f'threshold_{confidence_threshold}', # Specific sub-directory for this prediction run
+    conf=CONFIDENCE_THRESHOLD,                  # Confidence threshold
+    project=PROJECT_DIR,  # Use the dynamically generated project directory
+    name=f'threshold_{CONFIDENCE_THRESHOLD}', # Specific sub-directory for this prediction run
     exist_ok=True,                 # If True, won't increment run number if 'name' exists
     save_txt=True,                 # Save results as .txt files (YOLO format labels)
     save_conf=True,                # Include confidence scores in --save-txt labels
@@ -54,8 +60,13 @@ prediction_results_path = custom_model.predict(
     show_conf=True                 # Show confidence scores on bounding boxes
 )
 
-print(f"Prediction outputs (annotated images, text files if save_txt=True) are saved in directories starting from: my_inference_outputs/predictions_set1_threshold{confidence_threshold}/")
-if isinstance(prediction_results_path, str): # For single image/video, predict might return path directly
+print(
+    "Prediction outputs (annotated images, text files if save_txt=True) " \
+    "are saved in directories starting from: " \
+    f"my_inference_outputs/predictions_set1_threshold{CONFIDENCE_THRESHOLD}/"
+)
+# For single image/video, predict might return path directly
+if isinstance(prediction_results_path, str):
     print(f"Main results saved to: {prediction_results_path}")
 
 
@@ -64,10 +75,12 @@ results_generator = prediction_results_path
 
 all_detections_list = []  # Collect all detections here
 
-for i, r in enumerate(results_generator): 
+for i, r in enumerate(results_generator):
     original_image_path = r.path
     base_filename = os.path.basename(original_image_path)
-    print(f"\n--- Processing results for: {original_image_path} ({i+1} of {len(results_generator) if hasattr(results_generator, '__len__') else 'N/A'}) ---")
+    print(f"\n--- Processing results for: {original_image_path} ({i+1} of "
+          f"{len(results_generator) if hasattr(results_generator, '__len__') else 'N/A'}) ---"
+    )
 
     if r.boxes is not None:
         print(f"  Detected {len(r.boxes)} objects:")
@@ -79,9 +92,9 @@ for i, r in enumerate(results_generator):
             # Get just the folder and file name
             parent_folder = os.path.basename(os.path.dirname(original_image_path))
             file_name = os.path.basename(original_image_path)
-            image_path_short = f"{parent_folder}/{file_name}"
+            IMAGE_PATH_SHORT = f"{parent_folder}/{file_name}"
             detection_data = {
-                "image_path": image_path_short,
+                "image_path": IMAGE_PATH_SHORT,
                 "class_id": class_id,
                 "class_name": class_name,
                 "confidence": confidence,
@@ -109,18 +122,20 @@ for i, r in enumerate(results_generator):
             probs_tensor = torch.tensor(probs_tensor)
         top5_probs, top5_indices = torch.topk(probs_tensor, 5)
         print("  Top 5 Classification Probabilities (if applicable):")
-        for k in range(len(top5_probs)):
+        for k, value in enumerate(top5_probs):
             class_id = top5_indices[k].item()
             prob = top5_probs[k].item()
-            class_name = r.names[int(class_id)] if int(class_id) < len(r.names) else f"Unknown Class {int(class_id)}"
-            print(f"    {k+1}. Class='{class_name}' (ID {class_id}), Probability={prob:.4f}")
+            if prob > 0.5:
+                class_name = r.names[int(class_id)] \
+                    if int(class_id) < len(r.names) else f"Unknown Class {int(class_id)}"
+                print(f"    {k+1}. Class='{class_name}' (ID {class_id}), Probability={prob:.4f}")
     else:
         print("  No classification probabilities (probs) in this result.")
 
 print("\n--- Finished processing all prediction results. ---")
 
 # Save all detections to CSV with labels
-csv_path = "fine_tuning_test_data_detections_with_labels.csv"
+CSV_PATH = "fine_tuning_test_data_detections_with_labels.csv"
 columns = [
     "image_path",
     "class_id",
@@ -131,11 +146,11 @@ columns = [
 ]
 if all_detections_list:
     df = pd.DataFrame(all_detections_list, columns=columns)
-    file_exists = os.path.isfile(csv_path)
+    file_exists = os.path.isfile(CSV_PATH)
     df.to_csv(
-        csv_path,
+        CSV_PATH,
         mode='a' if file_exists else 'w',
         header=not file_exists,
         index=False
     )
-    print(f"Saved all detection data with labels to {csv_path} (appended if file existed).")
+    print(f"Saved all detection data with labels to {CSV_PATH} (appended if file existed).")
