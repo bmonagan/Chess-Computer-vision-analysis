@@ -1,10 +1,15 @@
+"""
+Module for visualizing detection percentage per picture using barplots.
+Reads a CSV file with detection percentages and saves a barplot image with an average line.
+"""
+# Third-Party Imports
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
+import config
 
-csv_path = r'C:\Users\Owner.BLIZZCON\Documents\Programming\Projects\Chess Computer vision analysis\my_inference_outputs\fine_tuning_20250603\threshold_0.5\fine_tuning_detection_percent.csv'
-df = pd.read_csv(csv_path)
+CSV_PATH = config.DETECTION_CSV_PATH
+df = pd.read_csv(CSV_PATH)
 
 # Convert percent detected to percent
 df['percent detected'] = df['percent detected'] * 100
@@ -28,6 +33,5 @@ plt.ylim(0, 100)
 plt.xticks(rotation=45, ha='right')
 plt.legend()
 plt.tight_layout()
-plt.savefig('my_inference_outputs/fine_tuning_20250603/threshold_0.5/graphs/fine_tuning_detection_percentage_barplot.png', dpi=300, bbox_inches='tight')
+plt.savefig(config.DETECTION_OUTPUT, dpi=300, bbox_inches='tight')
 plt.show()
-
